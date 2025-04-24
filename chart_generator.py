@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 import logging
 
 logging.basicConfig(level=logging.INFO)
-
+print("🚀 현재 실행 중인 chart_generator.py 입니다!")
 def generate_chart(ticker):
     try:
         end = datetime.today()
