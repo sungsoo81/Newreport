@@ -1,6 +1,6 @@
 import streamlit as st
 import chart_generator  # 🔍 전체 모듈 import (이게 핵심!)
-from chart_generator import generate_chart
+ffrom chart_module import generate_chart
 
 st.set_page_config(page_title="SmartSwing Tracker", layout="wide", initial_sidebar_state="expanded")
 st.title("📈 SmartSwing Tracker (DEBUG)")
