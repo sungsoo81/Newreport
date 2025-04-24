@@ -9,7 +9,7 @@ logging.basicConfig(level=logging.INFO)
 
 def generate_chart(ticker):
     try:
-        print("🚀 chart_module_dropna_safe.py 실행 시작")
+        print("🚀 chart_module_final_verified.py 실행 시작")
 
         end = datetime.today()
         start = end - timedelta(days=60)
@@ -19,28 +19,31 @@ def generate_chart(ticker):
         print("✅ 다운로드 완료")
 
         required_columns = ['Open', 'High', 'Low', 'Close', 'Volume']
-        df_columns = df.columns.tolist()
-        print("📎 다운로드된 컬럼:", df_columns)
+        print("📎 현재 DataFrame 컬럼:", df.columns.tolist())
 
         if df.empty or not all(col in df.columns for col in required_columns):
-            logging.warning("❌ 필요한 컬럼이 누락되었습니다.")
-            return None, f"❌ 데이터 누락: {set(required_columns) - set(df.columns)}"
+            missing = set(required_columns) - set(df.columns)
+            logging.warning(f"❌ 필요한 컬럼 누락: {missing}")
+            return None, f"❌ 데이터 누락: {missing}"
 
-        df = df[required_columns]
+        df = df[[col for col in required_columns if col in df.columns]]
 
-        # ✅ 수치형 변환
-        for col in required_columns:
-            if col in df.columns and isinstance(df[col], pd.Series):
-                try:
-                    df[col] = pd.to_numeric(df[col], errors="coerce")
-                except Exception as e:
-                    print(f"⚠️ {col} 변환 실패: {e}")
-            else:
-                print(f"⚠️ {col} 은 Series 아님 또는 존재하지 않음")
+        for col in df.columns:
+            try:
+                df[col] = pd.to_numeric(df[col], errors="coerce")
+            except Exception as e:
+                print(f"⚠️ {col} 변환 실패: {e}")
 
-        # ✅ 안전한 dropna 수행
+        # ✅ 실제 존재하는 컬럼 재확인
         existing_cols = [col for col in required_columns if col in df.columns]
-        print("🧪 dropna 대상 컬럼:", existing_cols)
+        print("🧪 dropna 대상 실제 컬럼:", existing_cols)
+
+        # 추가 진단 출력
+        for col in required_columns:
+            print(f"🔍 {col} in df.columns: {col in df.columns}")
+            if col in df:
+                print(f"    → type: {type(df[col])}")
+
         if existing_cols:
             df.dropna(subset=existing_cols, inplace=True)
         else:
@@ -49,7 +52,7 @@ def generate_chart(ticker):
         df = df.astype("float64").copy()
         df.index.name = "Date"
 
-        print("📍 클렌징 완료 후 dtype 확인:")
+        print("📍 클렌징 완료 후 DataFrame 상태:")
         print(df.dtypes)
         print(df.head())
 
