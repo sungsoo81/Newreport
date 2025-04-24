@@ -9,7 +9,7 @@ logging.basicConfig(level=logging.INFO)
 
 def generate_chart(ticker):
     try:
-        print("🚀 chart_module_final_verified.py 실행 시작")
+        print("🚀 chart_module_nanproof_final.py 실행 시작")
 
         end = datetime.today()
         start = end - timedelta(days=60)
@@ -34,20 +34,20 @@ def generate_chart(ticker):
             except Exception as e:
                 print(f"⚠️ {col} 변환 실패: {e}")
 
-        # ✅ 실제 존재하는 컬럼 재확인
-        existing_cols = [col for col in required_columns if col in df.columns]
-        print("🧪 dropna 대상 실제 컬럼:", existing_cols)
+        # ✅ NaN-only 컬럼 제거
+        existing_cols = [col for col in required_columns if col in df.columns and not df[col].isna().all()]
+        print("🧪 NaN-only 제거 후 dropna 대상 컬럼:", existing_cols)
 
-        # 추가 진단 출력
+        # 진단 로그
         for col in required_columns:
             print(f"🔍 {col} in df.columns: {col in df.columns}")
             if col in df:
-                print(f"    → type: {type(df[col])}")
+                print(f"    → type: {type(df[col])}, NaN 비율: {df[col].isna().mean():.2%}")
 
         if existing_cols:
             df.dropna(subset=existing_cols, inplace=True)
         else:
-            return None, "❌ dropna 수행할 유효 컬럼이 없습니다."
+            return None, "❌ 유효한 컬럼이 전혀 없어 dropna 불가"
 
         df = df.astype("float64").copy()
         df.index.name = "Date"
