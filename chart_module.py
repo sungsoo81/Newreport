@@ -9,7 +9,7 @@ logging.basicConfig(level=logging.INFO)
 
 def generate_chart(ticker):
     try:
-        print("🚀 chart_module_keyerror_safe.py 실행 시작")
+        print("🚀 chart_module_dropna_safe.py 실행 시작")
 
         end = datetime.today()
         start = end - timedelta(days=60)
@@ -28,7 +28,7 @@ def generate_chart(ticker):
 
         df = df[required_columns]
 
-        # ✅ 2단계: 수치형 강제 변환
+        # ✅ 수치형 변환
         for col in required_columns:
             if col in df.columns and isinstance(df[col], pd.Series):
                 try:
@@ -38,9 +38,14 @@ def generate_chart(ticker):
             else:
                 print(f"⚠️ {col} 은 Series 아님 또는 존재하지 않음")
 
-        # ✅ 3단계: 컬럼 존재 여부 확인 후 dropna
+        # ✅ 안전한 dropna 수행
         existing_cols = [col for col in required_columns if col in df.columns]
-        df.dropna(subset=existing_cols, inplace=True)
+        print("🧪 dropna 대상 컬럼:", existing_cols)
+        if existing_cols:
+            df.dropna(subset=existing_cols, inplace=True)
+        else:
+            return None, "❌ dropna 수행할 유효 컬럼이 없습니다."
+
         df = df.astype("float64").copy()
         df.index.name = "Date"
 
