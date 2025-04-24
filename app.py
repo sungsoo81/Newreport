@@ -1,12 +1,12 @@
 import streamlit as st
-import chart_module  # 🔍 전체 모듈 import
+import chart_module  # ✅ 모듈 전체 import
 from chart_module import generate_chart
 
 st.set_page_config(page_title="SmartSwing Tracker", layout="wide", initial_sidebar_state="expanded")
 st.title("📈 SmartSwing Tracker (DEBUG)")
 
-# ✅ 수정된 모듈 경로 확인
-st.write("💡 현재 불러진 chart_module.py 경로:", chart_module.__file__)
+# ✅ 현재 chart_module 경로 확인
+st.write("💡 현재 불러진 chart_module.py 경로:", chart_module.__file__)  # ⬅️ 이 줄은 OK
 
 uploaded_file = st.sidebar.file_uploader("📤 credentials.json 업로드", type="json")
 if uploaded_file:
