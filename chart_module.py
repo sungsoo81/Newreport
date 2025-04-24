@@ -27,7 +27,8 @@ def generate_chart(ticker):
 
         # ✅ 2단계: 수치형 강제 변환 및 이상치 제거
         for col in required_columns:
-            df[col] = pd.to_numeric(df[col], errors="coerce")
+            if col in df.columns and pd.api.types.is_list_like(df[col]):
+                df[col] = pd.to_numeric(df[col], errors="coerce")
         df.dropna(subset=required_columns, inplace=True)
         df = df.astype("float64").copy()
         df.index.name = "Date"
