@@ -51,9 +51,6 @@ def generate_chart(ticker):
     except Exception as e:
         logging.error(f"차트 생성 중 예외 발생: {str(e)}")
         return None, f"❌ 차트 생성 실패: {str(e)}"
-"""
 
-with open(chart_final_path, "w") as f:
-    f.write(final_code.strip())
 
-chart_final_path
+
