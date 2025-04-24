@@ -1,4 +1,6 @@
 import streamlit as st
+import chart_generator
+st.write("💡 chart_generator 모듈:", chart_generator.__file__)
 from chart_generator import generate_chart
 
 st.set_page_config(page_title="SmartSwing Tracker", layout="wide", initial_sidebar_state="expanded")
