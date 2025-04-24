@@ -38,7 +38,7 @@ def generate_chart(ticker):
 
         try:
             print("📍 4단계: dtype 읽기")
-            dtype = open_series.dtype
+            dtype = open_series.dtypes
             print("✅ dtype:", dtype)
         except Exception as e:
             print("❌ dtype 읽기 실패:", e)
