@@ -8,7 +8,7 @@ logging.basicConfig(level=logging.INFO)
 
 def generate_chart(ticker):
     try:
-        print("🚀 현재 실행 중인 chart_generator.py (FINAL) 입니다!")
+        print("🚀 현재 실행 중인 chart_module.py 입니다!")
 
         end = datetime.today()
         start = end - timedelta(days=60)
