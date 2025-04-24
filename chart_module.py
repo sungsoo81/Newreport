@@ -9,7 +9,7 @@ logging.basicConfig(level=logging.INFO)
 
 def generate_chart(ticker):
     try:
-        print("🚀 chart_module_safe_final.py 실행 시작")
+        print("🚀 chart_module_keyerror_safe.py 실행 시작")
 
         end = datetime.today()
         start = end - timedelta(days=60)
@@ -19,13 +19,16 @@ def generate_chart(ticker):
         print("✅ 다운로드 완료")
 
         required_columns = ['Open', 'High', 'Low', 'Close', 'Volume']
+        df_columns = df.columns.tolist()
+        print("📎 다운로드된 컬럼:", df_columns)
+
         if df.empty or not all(col in df.columns for col in required_columns):
             logging.warning("❌ 필요한 컬럼이 누락되었습니다.")
-            return None, "❌ 데이터가 없습니다: 필요한 열이 없습니다."
+            return None, f"❌ 데이터 누락: {set(required_columns) - set(df.columns)}"
 
         df = df[required_columns]
 
-        # ✅ 2단계: 안전하게 수치형 변환
+        # ✅ 2단계: 수치형 강제 변환
         for col in required_columns:
             if col in df.columns and isinstance(df[col], pd.Series):
                 try:
@@ -33,9 +36,11 @@ def generate_chart(ticker):
                 except Exception as e:
                     print(f"⚠️ {col} 변환 실패: {e}")
             else:
-                print(f"⚠️ {col} 은 Series 타입이 아님:", type(df[col]))
+                print(f"⚠️ {col} 은 Series 아님 또는 존재하지 않음")
 
-        df.dropna(subset=required_columns, inplace=True)
+        # ✅ 3단계: 컬럼 존재 여부 확인 후 dropna
+        existing_cols = [col for col in required_columns if col in df.columns]
+        df.dropna(subset=existing_cols, inplace=True)
         df = df.astype("float64").copy()
         df.index.name = "Date"
 
