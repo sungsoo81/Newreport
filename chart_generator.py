@@ -1,7 +1,3 @@
-# chart_generator.py 최종판 생성
-chart_final_path = "/mnt/data/chart_generator_FINAL.py"
-
-final_code = """
 import yfinance as yf
 import mplfinance as mpf
 import pandas as pd
@@ -29,8 +25,8 @@ def generate_chart(ticker):
         # ✅ 반드시 Series로 분리
         open_series = df["Open"]
         logging.info(f"[DEBUG] Open dtype: {open_series.dtype}")
-        logging.info(f"[DEBUG] Open values (head):\\n{open_series.head()}")
-        logging.info(f"[DEBUG] Open types:\\n{[type(x) for x in open_series.head()]}")
+        logging.info(f"[DEBUG] Open values (head):\n{open_series.head()}")
+        logging.info(f"[DEBUG] Open types:\n{[type(x) for x in open_series.head()]}")
 
         df = df.astype("float64").copy()
         df.index.name = "Date"
@@ -51,6 +47,3 @@ def generate_chart(ticker):
     except Exception as e:
         logging.error(f"차트 생성 중 예외 발생: {str(e)}")
         return None, f"❌ 차트 생성 실패: {str(e)}"
-
-
-
