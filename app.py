@@ -2,7 +2,7 @@ import streamlit as st
 from chart_generator import generate_chart
 
 st.set_page_config(page_title="SmartSwing Tracker", layout="wide", initial_sidebar_state="expanded")
-st.title("📈 SmartSwing Tracker")
+st.title("📈 SmartSwing Tracker (CLEAN BUILD)")
 
 uploaded_file = st.sidebar.file_uploader("📤 credentials.json 업로드", type="json")
 if uploaded_file:

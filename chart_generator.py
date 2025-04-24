@@ -5,12 +5,13 @@ from datetime import datetime, timedelta
 import logging
 
 logging.basicConfig(level=logging.INFO)
-print("🚀 현재 실행 중인 chart_generator.py 입니다!")
+
 def generate_chart(ticker):
     try:
+        print("🚀 현재 실행 중인 chart_generator.py 입니다!")  # 🔍 실행 검증용 로그
+
         end = datetime.today()
         start = end - timedelta(days=60)
-
         df = yf.download(ticker, start=start, end=end)
 
         required_columns = ['Open', 'High', 'Low', 'Close', 'Volume']
@@ -20,7 +21,6 @@ def generate_chart(ticker):
 
         df = df[required_columns].dropna()
 
-        # Series 로 확인
         open_series = df["Open"]
         logging.info(f"[DEBUG] Open dtype: {open_series.dtype}")
         logging.info(f"[DEBUG] Open values (head):\n{open_series.head()}")
@@ -30,7 +30,6 @@ def generate_chart(ticker):
         df.index.name = "Date"
 
         chart_path = f"{ticker}_{datetime.now().strftime('%Y%m%d%H%M%S')}_chart.png"
-
         mpf.plot(
             df,
             type="candle",
