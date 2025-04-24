@@ -9,7 +9,7 @@ logging.basicConfig(level=logging.INFO)
 
 def generate_chart(ticker):
     try:
-        print("🚀 chart_module_clean_final.py 실행 시작")
+        print("🚀 chart_module_safe_final.py 실행 시작")
 
         end = datetime.today()
         start = end - timedelta(days=60)
@@ -25,10 +25,16 @@ def generate_chart(ticker):
 
         df = df[required_columns]
 
-        # ✅ 2단계: 수치형 강제 변환 및 이상치 제거
+        # ✅ 2단계: 안전하게 수치형 변환
         for col in required_columns:
-            if col in df.columns and pd.api.types.is_list_like(df[col]):
-                df[col] = pd.to_numeric(df[col], errors="coerce")
+            if col in df.columns and isinstance(df[col], pd.Series):
+                try:
+                    df[col] = pd.to_numeric(df[col], errors="coerce")
+                except Exception as e:
+                    print(f"⚠️ {col} 변환 실패: {e}")
+            else:
+                print(f"⚠️ {col} 은 Series 타입이 아님:", type(df[col]))
+
         df.dropna(subset=required_columns, inplace=True)
         df = df.astype("float64").copy()
         df.index.name = "Date"
